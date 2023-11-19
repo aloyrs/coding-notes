@@ -1,0 +1,7 @@
+- create project
+- create app
+- create view
+- create url config
+- create models
+- database
+- add app to project (add to INSTALLED_APPS in settings.py)
