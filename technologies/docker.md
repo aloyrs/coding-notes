@@ -2,7 +2,7 @@ Docker containerizes code for consistent and reproducible execution across diffe
 
 > Image = blueprint for container
 
-![Image layers](image.png)
+![Docker Image layers](docker-image-layers.png)
 
 Image contains:
 
