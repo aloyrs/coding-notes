@@ -111,3 +111,30 @@ docker run -v D:\src\docker-crash-course\api:/app/ my_image
 ```
 
 Changes made in that local directory on the host machine are reflected immediately inside the container
+
+## Docker Compose
+
+Docker Compose is a tool for defining and running multi-container Docker applications. It allows you to define all services, networks, and volumes in a single YAML file (docker-compose.yml) for easy orchestration.
+
+```yaml
+version: "3.8"
+services:
+  api:
+    build: ./api
+    container_name: api_c
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./api:/app
+      - /app/node_modules
+```
+
+```bash
+# Run services
+docker-compose up
+# build and run services
+docker-compose up --build
+
+# Stop services
+docker-compose down
+```
