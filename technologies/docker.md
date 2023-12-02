@@ -138,3 +138,58 @@ docker-compose up --build
 # Stop services
 docker-compose down
 ```
+
+## Docker Hub
+
+Use docker hub to push and pull images
+
+1. Build docker image
+
+```bash
+docker build -t my_image:latest .
+```
+
+2. Tag docker image with username and version tag
+
+```bash
+docker tag my_image:latest your_username/my_repository:latest
+```
+
+3. Push docker image
+
+```bash
+docker push your_username/my_repository:latest
+```
+
+### Using docker image from docker hub repository
+
+- Pull image from docker hub and run container
+- Use in docker-compose.yaml ( use image in frontend & backend to build containers during docker-compose)
+
+  ```yaml
+  services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres_c
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123454
+    ports:
+      - "5432:5432"
+
+  frontend:
+    image: aloysiustanrs/to-do-fullstack-frontend:latest
+    container_name: frontend_c
+    ports:
+      - "3000:3000"
+    stdin_open: true
+
+  backend:
+    image: aloysiustanrs/to-do-fullstack-backend:latest
+    container_name: backend_c
+    ports:
+      - "3001:3001"
+    depends_on:
+      - postgres
+  ```
