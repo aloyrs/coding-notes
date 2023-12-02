@@ -1,4 +1,6 @@
-# Redis Overview
+# Redis
+
+_*CACHE TO REDUCE API CALLS??*_
 
 ## What is Redis?
 
