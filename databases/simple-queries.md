@@ -18,6 +18,12 @@ SELECT * FROM employees;
 
 - Retrieves all columns and rows from the `employees` table.
 
+## INSERT Query
+
+```sql
+INSERT INTO employees (name, age) VALUES ('John Doe', 30);
+```
+
 ## UPDATE Query
 
 ```sql
