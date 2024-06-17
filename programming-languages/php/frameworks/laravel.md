@@ -51,3 +51,48 @@ Now my database looks like this , because there are multiple default tables
 ![alt text](image-3.png)
 
 ![alt text](image-2.png)
+
+# Example (Create list Item , add to DB)
+
+```php
+// welcome.blade.php file
+
+<body>
+  <h1>To do list</h1>
+
+  <form method="POST" action="/list-items" accept-charset="UTF-8">
+    @csrf
+    <label for="listItem">New todo Item</label>
+    <input type="text" name="listItem" required />
+    <button type="submit">Add Item</button>
+  </form>
+</body>
+```
+
+```php
+//web.php
+
+Route::post('/list-items', [TodoListController::class, 'store']);
+```
+
+```php
+//TodoListController.php
+
+class TodoListController extends Controller
+{
+    public function store(Request $request)
+    {
+        $request->validate([
+            'listItem' => 'required|string|max:255',
+        ]);
+
+        $listItem = new ListItem();
+        $listItem->name = $request->input('listItem');
+        $listItem->is_complete = 0; // Default to not completed
+        $listItem->save();
+
+        return redirect()->back()->with('success', 'Item added successfully!');
+    }
+}
+
+```
