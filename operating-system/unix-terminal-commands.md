@@ -154,3 +154,19 @@ Unix-like operating systems, including Linux, provide a powerful command-line in
   ```
 
 These are some of the fundamental Unix terminal commands. To get more information on any of these commands, you can use the `man` command followed by the command name. For example, `man ls` will display the manual page for the `ls` command, explaining its usage and options in detail.
+
+```bash
+ssh -i <ssh key> <user>@<ip address>
+
+#
+
+su <user>
+
+
+```
+
+```bash
+cat /etc/passwd
+**-/
+# See all users
+```
