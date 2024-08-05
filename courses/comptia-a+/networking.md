@@ -21,6 +21,9 @@
   - Fiber: Uses fiber optic cables for high-speed internet
 - Gateway = Modem + Switch + Wifi Router
 - NIC (Network Interface Card)
+
+## Others
+
 - SDN (Software Defined Networking) : Provides an interface that allows users to manage and control all the network's control planes from a GUI( Abstracting the control plane from the data plane)
 - 802.11.ax = WIFI 6
 - RFID
@@ -44,4 +47,10 @@
 - DHCP lease renewal
 - VLAN (Virtual LAN): Segments a physical network into multiple logical networks (Eg. Use 1 switch instead of 3 switches to make 3 LANs)
 - VPN (Virtual Private Network): Eg. Laptop with VPN software enabled -> VPN Concentrator (manages and secures multiple VPN connections) -> Corparate Network
--
+
+## Networking tools
+
+- Crimping
+- Cable tester (test the RJ45 after crimping)
+- Tone generator
+- loopback adapter : test connection
