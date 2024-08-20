@@ -23,5 +23,5 @@
 - SCSI (communication standard like SATA)
 - SAS (Serial Attached SCSI)
 - daisy chain : wiring scheme , wire together in a ring
-- SATA (Serial-ATA)
+- SATA (Serial-ATA (Advanced Technology Attachment) )
 - PATA (Parallel-ATA)
