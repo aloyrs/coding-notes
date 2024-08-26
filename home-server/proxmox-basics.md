@@ -1,0 +1,2 @@
+- containers use fewer resources (like RAM) than VMs
+- migrating containers takes longer than migrating a VM to another node
