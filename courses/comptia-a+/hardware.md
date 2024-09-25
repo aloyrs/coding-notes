@@ -25,3 +25,8 @@
 - daisy chain : wiring scheme , wire together in a ring
 - SATA (Serial-ATA (Advanced Technology Attachment) )
 - PATA (Parallel-ATA)
+- PCIe
+- BIOS (Basic Input/Output System)
+- UEFI BIOS replace legacy BIOS (a standardization for BIOS)
+- Reset BIOS : 1. CMOS Battery(remove and put back) 2.Clear CMOS Jumper(short 2 pins)
+- CPU: "32-bit" and "64-bit" refer to CPU architecture , CORES , MULTITHREADING , VIRTUALIZATION SUPPORT
