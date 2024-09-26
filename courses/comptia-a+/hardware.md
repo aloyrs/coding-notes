@@ -43,6 +43,10 @@
 - F-connecter(for coaxial cable)
 - Molex connector (eg.computer PSU)
 
+## Power
+
+PSU converts incoming electrical power (usually from an outlet) to the appropriate voltage required by the devices it powers
+
 ## RAID
 
 - Stands for **Redundant Array of Independant Disks**
