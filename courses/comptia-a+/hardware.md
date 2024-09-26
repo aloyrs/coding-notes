@@ -25,13 +25,11 @@
 - daisy chain : wiring scheme , wire together in a ring
 - SATA (Serial-ATA (Advanced Technology Attachment) )
 - PATA (Parallel-ATA)
-<<<<<<< HEAD
 - PCIe
 - BIOS (Basic Input/Output System)
 - UEFI BIOS replace legacy BIOS (a standardization for BIOS)
 - Reset BIOS : 1. CMOS Battery(remove and put back) 2.Clear CMOS Jumper(short 2 pins)
 - CPU: "32-bit" and "64-bit" refer to CPU architecture , CORES , MULTITHREADING , VIRTUALIZATION SUPPORT
-=======
 - DSL (Digital Subscriber Line) is a technology used to provide high-speed internet access over traditional telephone lines
 - ECC (Error Correcting Code) Memory
 - RAM parity (even parity check)
@@ -76,4 +74,3 @@
 | RAID 1     | 2              | Size of One Drive                               | 1 drive                   |
 | RAID 5     | 3              | (Number of Drives - 1) x Size of Smallest Drive | 1 drive                   |
 | RAID 10    | 4              | (Number of Drives / 2) x Size of Smallest Drive | 1 drive per mirrored pair |
->>>>>>> 529ef79c84c260609851491f9fa9f5083912c122
