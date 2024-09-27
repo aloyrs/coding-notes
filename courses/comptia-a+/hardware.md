@@ -36,6 +36,14 @@
 - M.2 interface
 - AHCI vs NVMe
 
+## Printing
+
+- Laser printer (toner, a type of poweder)
+- Inkjet printer (ink)
+- Thermal pritner (uses thermal paper, eg. receipt paper (text will fade overtime))
+- Dot-martrix (impact) printer
+- 3D printer
+
 ## Connectors
 
 - RJ11 (DSL)
