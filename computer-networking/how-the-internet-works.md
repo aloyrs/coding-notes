@@ -15,6 +15,8 @@
 
 # How the internet works?
 
+![Untitled](Untitled.png)
+
 # How a URL Request Works in Computer Networking
 
 - When I enter 'google.com' into my browser, my ISP (Internet Service Provider) helps me obtain the IP address through the DNS resolution process.

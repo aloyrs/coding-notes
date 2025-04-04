@@ -3,6 +3,7 @@
 - The OSI (Open Systems Interconnection) model is a conceptual framework used to understand and standardize how different networking protocols and technologies communicate in a network.
 - It consists of seven distinct layers, each with its own unique function and purpose.
 - The OSI model was developed by the International Organization for Standardization (ISO) to facilitate interoperability and communication between different network devices and systems.
+- The OSI model *describes 7 layers that computer systems use to communicate over a network , Conceptual model , not in use (Theoretical)*
 
 **Seven Layers of the OSI Model:**
 
@@ -41,8 +42,13 @@
    - Responsible for data translation, encryption, and compression.
    - It ensures that data is presented in a readable format for the application layer.
    - Key components: Data encryption, character encoding, and data compression.
+   - Data format : HTML , XML , jpg
+   - Encryption : SSL
 
 7. **Application Layer:**
    - This is the topmost layer that interacts directly with end-user applications.
    - It provides services and protocols that allow applications to communicate over the network.
    - Key components: HTTP, FTP, SMTP, and application-specific protocols.
+
+Acronym for OSI model:
+_Please do not take sausage pizza away_

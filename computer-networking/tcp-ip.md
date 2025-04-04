@@ -1,37 +1,183 @@
-**TCP/IP Model**
+# TCP/IP Model
 
-1. **Application Layer**
+> TCP/IP model consists of 4 Layers
 
-   - Manages user applications and interactions.
-   - Protocols: HTTP, SMTP, FTP, DNS.
-   - Defines data presentation and offers encryption and authentication services.
+![Untitled](Untitled%203.png)
 
-2. **Transport Layer**
+- Application layer
+- Transport layer
+- Network
+- Data Link
+- Physical layer
 
-   - Handles end-to-end communication and data segmentation.
-   - Includes TCP (reliable) and UDP (fast, not reliable).
-   - TCP: Connection-oriented, data integrity, flow control, error correction.
-   - UDP: Connectionless, used for real-time applications.
-   - Three-Way Handshake: Used in TCP to establish connections.
+---
 
-3. **Internet Layer**
+---
 
-   - Focuses on addressing and routing data across networks.
-   - Uses Internet Protocol (IP), including IPv4 and IPv6.
-   - Routers operate at this layer to forward data.
+# Encapsulation & Decapsulation process
 
-4. **Link Layer**
-   - Deals with physical data transmission over network media (e.g., Ethernet, Wi-Fi).
-   - Manages data frames, MAC addressing, error detection, and medium access control.
-   - Network interface cards (NICs) and switches are part of this layer.
+> Adding and removing headers and trailers to data as it is transmitted through the layers of the model
 
-**Key Points**
+![Untitled](Untitled%204.png)
 
-- TCP/IP model consists of four layers.
-- Application Layer handles user applications and services.
-- Transport Layer manages end-to-end communication with TCP and UDP.
-- Internet Layer is responsible for addressing and routing using IP.
-- Link Layer handles physical data transmission and network media access.
-- Three-Way Handshake is used in the Transport Layer to establish reliable connections with TCP.
+![Untitled](Untitled%205.png)
 
-These notes provide a concise overview of the TCP/IP model, its key layers, and their roles in computer networking.
+![Untitled](Untitled%206.png)
+
+![Untitled](Untitled%207.png)
+
+---
+
+# Application Layer
+
+Where users interact , on devices
+
+- Web browser: Chrome
+- Email clients: Microsoft Outlook
+- HTTP , FTP , SMTP
+- Whats app
+
+## Status codes
+
+![Untitled](Untitled%208.png)
+
+## Cookies
+
+HTTP is stateless, so cookies is used to by browser to remember user data.
+
+> Cookie: A small text file stored on a user's device by a website, used to remember user preferences and activity.
+
+### Third party cookies
+
+> Third-party cookie: A cookie set by a domain other than the one that the user is currently visiting, used for tracking user behavior across different websites.
+
+## DNS (Domain Name System)
+
+> System that translates domain names (e.g. [**www.google.com**](http://www.example.com/)) into IP addresses
+
+eg:
+
+[blog.example.com](http://blog.example.com/)
+
+blog = sub domain
+
+example = second-level domain (SLD)
+
+.com = top-level domain(TLD)
+
+## DHCP (**Dynamic Host Configuration Protocol**)
+
+- _DHCP is a network protocol used to dynamically assign IP addresses_
+  ![Untitled](Untitled%209.png)
+
+---
+
+# Transport Layer
+
+> Guarantee the end to end delivery of data between application and server
+
+**_Data in form of segments_**
+
+>
+
+## TCP (Transmission Control Protocol)
+
+- Segment Numbering System
+- Connection oriented
+- Error control
+- Flow Control
+- Congestion control
+- Full Duplex : data can be sent in both directions at the same time.
+
+## UDP (User Datagram Protocol)
+
+> _UDP (User Datagram Protocol) is a connectionless, unreliable transport protocol that allows for fast and efficient transmission of data packets over a network._
+
+**UDP is often used in scenarios where immediate delivery of data is more important than reliability**
+
+- Unreliable : does not guarantee the delivery of data, and packets may be lost or delivered out of order
+- Connectionless : does not establish a connection before transmitting data.
+- No congestion control
+
+Example :
+
+- Voice over IP (VoIP) like Skype or Zoom
+- Online Gaming
+- Streaming Media
+
+![Data packet in UDP , header + data](Untitled%2010.png)
+
+Data packet in UDP , header + data
+
+## Features
+
+- Features meaning
+  ## Multiplexing
+  ![Untitled](Untitled%2011.png)
+  ## **TCP Congestion Control**
+  > Manage the rate at which data is transmitted over a network
+  > Ensures that the sender does not overwhelm the receiver with data, causing packets to be dropped or delayed
+  ## Checksum
+  > Extra data calculated from data using a math formula
+  > If check sum at receiving end does not match the checksum sent with the data, data is corrupted and data should be retransmitted
+  ## TCP Timers
+  1. Retransmission timer: This timer is used by the sender to retransmit packets if they are not acknowledged within a specified time period.
+  2. Keep-alive timer: This timer is used by the receiver to ensure that the sender is still active and able to receive data.
+
+## 3 Way Handshake
+
+> This could also be seen as a way of how TCP connection is established.
+
+1. SYN (Synchronize) - Sender (client) sending a SYN message to the receiver (server) to initiate a connection request. This message contains a random sequence number that is generated by the sender
+2. SYN-ACK (Synchronize-Acknowledge) - After receiving the SYN message, the receiver (server) responds with a SYN-ACK message. This message contains an acknowledgment of the sequence number sent by the sender and also a randomly generated sequence number
+3. ACK (Acknowledgment) - The final step of the 3-way handshake involves the sender (client) sending an ACK message to the receiver (server). This message contains an acknowledgment of the sequence number sent by the receiver
+
+![Untitled](Untitled%2012.png)
+
+---
+
+# Network Layer
+
+> To find the optimal path for data packets to travel through the network
+
+**_Data in form of packets_**
+
+Routers use IP addresses to route the packets
+
+>
+
+## IP (Internet Protocol)
+
+## IPv4
+
+![Might not be enough for world population](Untitled%2013.png)
+
+Might not be enough for world population
+
+## IPv6
+
+![340 undecillion unique addresses ](Untitled%2014.png)
+
+340 undecillion unique addresses
+
+---
+
+# Data Link Layer
+
+- Ethernet , switches
+
+## MAC (Media access control) address
+
+![Untitled](Untitled%2015.png)
+
+![Untitled](Untitled%2016.png)
+
+---
+
+# Physical Layer
+
+- cables
+
+---
+
+![Untitled](Untitled%2017.png)
