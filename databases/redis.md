@@ -1,6 +1,6 @@
 # Redis
 
-_*CACHE TO REDUCE API CALLS??*_
+CACHE TO REDUCE API CALLS
 
 ## What is Redis?
 
