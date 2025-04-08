@@ -13,7 +13,7 @@ A application that has:
 
 ![frontend-backend](./images/rest-api.png)
 
-When frontend send requests to backend , there can be middleware can intercept the API request (eg. arious tasks such as authentication, authorization, logging, data transformation)
+When frontend send requests to backend , there can be middleware can intercept the API request (eg. various tasks such as authentication, authorization, logging, data transformation)
 
 # Backend
 

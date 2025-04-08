@@ -2,4 +2,4 @@
 
 ![Foreign keys](image.png)
 
-Connect 2 databases
+Connects 2 databases

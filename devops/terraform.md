@@ -29,8 +29,8 @@ resource "aws_instance" "loy_app_server" {
 }
 ```
 
-get ami from ![alt text](./images/image.png)
+get ami from ![alt text](image.png)
 
-![alt text](./images/image-3.png)
+![alt text](image-3.png)
 
-after running using `terraform apply` ![alt text](./images/image-2.png)
+after running using `terraform apply` ![alt text](image-2.png)
