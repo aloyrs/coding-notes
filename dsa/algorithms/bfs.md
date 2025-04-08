@@ -10,14 +10,13 @@ Uses **QUEUE**
 
 ---
 
-**SPACE COMPLEXITY - O(B^D)  / O(W)**
+**SPACE COMPLEXITY - O(B^D) / O(W)**
 
 B is branching factor (max child per node eg. 2), D is depth (max distance from root)
 
-W is width of biggest level 
+W is width of biggest level
 
-> *Max space needed in queue*
-> 
+> _Max space needed in queue_
 
 ---
 
@@ -28,8 +27,7 @@ W is width of biggest level
 # How?
 
 > Starts at some node , explore neighbour nodes , before moving on to next level neighbours
-( Explores nodes in layers )
-> 
+> ( Explores nodes in layers )
 
 ![Untitled](Untitled%2036.png)
 
