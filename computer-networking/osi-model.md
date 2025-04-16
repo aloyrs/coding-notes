@@ -7,6 +7,9 @@
 
 **Seven Layers of the OSI Model:**
 
+Acronym for OSI model:
+_Please do not take sausage pizza away_
+
 1. **Physical Layer:**
 
    - This layer deals with the physical medium and transmission of raw bits over a physical link.
@@ -49,6 +52,3 @@
    - This is the topmost layer that interacts directly with end-user applications.
    - It provides services and protocols that allow applications to communicate over the network.
    - Key components: HTTP, FTP, SMTP, and application-specific protocols.
-
-Acronym for OSI model:
-_Please do not take sausage pizza away_
