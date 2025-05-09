@@ -32,16 +32,95 @@ These trigger the stream pipeline and produce a result or side effect.
 ```java
 List<Integer> numbers = Arrays.asList(1, 2, 3, 4);
 
-        int product = numbers.stream()
-                .reduce(1, (a, b) -> a * b);  // terminal: multiply all numbers
+int product = numbers.stream()
+        .reduce(1, (a, b) -> a * b);  // terminal: multiply all numbers
 
-        System.out.println("Product: " + product); // Output: Product: 24
+System.out.println("Product: " + product); // Output: Product: 24
 ```
 
 ```java
 List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
 
-        names.stream()
-             .forEach(name -> System.out.println("Hello " + name)); // terminal: print each
+names.stream()
+        .forEach(name -> System.out.println("Hello " + name)); // terminal: print each
 
+```
+
+# Function
+
+.andThen
+
+.compose
+
+.apply
+
+```java
+// 1 arguement 1 output
+Function<Integer,Integer> incrementBy1 = num -> num + 1;
+Function<Integer,Integer> multiplyBy2 = num -> num * 2;
+
+int incrementThenMultiply = incrementBy1.andThen(multiplyBy2).apply(5);
+System.out.println(incrementThenMultiply); // Output: 12 , (5+1)*2
+
+int multiplyThenIncrement = incrementBy1.compose(multiplyBy2).apply(5);
+System.out.println(multiplyThenIncrement); // Output: 11 , (5*2)+1
+```
+
+```java
+// 2 arguement 1 output
+BiFunction<Integer,Integer,Integer> doubleOfSum = (num1,num2) -> (num1+num2)*2 ;
+System.out.println(doubleOfSum.apply(2,3));
+```
+
+# Consumer
+
+.accept
+
+```java
+List<Integer> nums = Arrays.asList(1,2,3,4,5,6,7,8,9);
+
+Consumer<Integer> consumerInt = num -> System.out.println(num + 2);
+consumerInt.accept(1);
+```
+
+```java
+BiConsumer<Integer,Integer> outputSum = (num1,num2) -> System.out.println(num1+num2);
+outputSum.accept(5,4); // 9
+```
+
+# Predicate
+
+Returns a boolean
+
+```java
+List<Integer> nums = Arrays.asList(1,2,3,4,5,6,7,8,9);
+Predicate<Integer> divisibleByTwoPredicate = num -> num%2 == 0;
+nums.stream().filter(divisibleByTwoPredicate).forEach(System.out::println);
+```
+
+# Supplier
+
+Supplier is good because it lets you defer the creation of a value until it's actually needed, saving resources and improving efficiency.
+
+"You want to define the logic now, but only execute it later, possibly under certain conditions."
+
+```java
+import java.util.function.*;
+
+public class Main {
+
+    public static String expensiveMethod(){
+        return "super_expensive_text";
+    }
+    public static void main(String[] args) {
+
+        Supplier<String> prepareExpensiveMethod = () -> expensiveMethod();
+
+        // ...do others
+
+        String expensiveText = prepareExpensiveMethod.get();
+        System.out.println(expensiveText); //super_expensive_text
+
+    }
+}
 ```
