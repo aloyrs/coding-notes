@@ -1,3 +1,15 @@
+# Functional Programming
+
+Pure functional programming follows these principles:
+
+- No internal state or side effects
+
+- Uses pure functions (same input → same output)
+
+- Emphasizes higher-order functions (functions that take or return other functions)
+
+"Functional programming is about writing functions that take inputs and return outputs without changing anything outside the function — no modifying global variables, just working with the arguments passed in."
+
 # When to use functional programming paradigm?
 
 Use functional programming when you want to write cleaner, more concise code that focuses on what to do rather than how to do it, especially for processing collections or streams.
@@ -88,6 +100,8 @@ BiConsumer<Integer,Integer> outputSum = (num1,num2) -> System.out.println(num1+n
 outputSum.accept(5,4); // 9
 ```
 
+Can be used as a callback too!
+
 # Predicate
 
 Returns a boolean
@@ -123,4 +137,77 @@ public class Main {
 
     }
 }
+```
+
+# Optionals
+
+.isPresent
+
+.orElseThrow
+
+Some functions will return a `Optional` object which means something or nothing.
+
+Or we can use Optional to avoid `NullPointerException`
+
+```java
+String name = Optional.ofNullable(getName()).orElse("Default Name");
+```
+
+# Combinator pattern in functional programming
+
+```java
+import java.util.function.Function;
+
+// A simple User class
+class User {
+    String name;
+    String email;
+
+    User(String name, String email) {
+        this.name = name;
+        this.email = email;
+    }
+}
+
+// A result type to hold validation results
+enum ValidationResult {
+    SUCCESS,
+    NAME_EMPTY,
+    EMAIL_INVALID
+}
+
+// Functional interface for a validator
+interface Validator extends Function<User, ValidationResult> {
+
+    // Combinator: combines two validators
+    default Validator and(Validator other) {
+        return user -> {
+            ValidationResult result = this.apply(user);
+            return result == ValidationResult.SUCCESS ? other.apply(user) : result;
+        };
+    }
+}
+
+// Main class with validation logic
+public class CombinatorExample {
+
+    // Static validators
+    static Validator nameNotEmpty = user ->
+            (user.name == null || user.name.isEmpty()) ? ValidationResult.NAME_EMPTY : ValidationResult.SUCCESS;
+
+    static Validator emailContainsAt = user ->
+            (user.email != null && user.email.contains("@")) ? ValidationResult.SUCCESS : ValidationResult.EMAIL_INVALID;
+
+    public static void main(String[] args) {
+        // Combine validators using the combinator pattern
+        Validator isValidUser = nameNotEmpty.and(emailContainsAt);
+
+        User user = new User("Alice", "alice@example.com");
+        System.out.println("Validation result: " + isValidUser.apply(user));  // SUCCESS
+
+        User invalidUser = new User("", "aliceexample.com");
+        System.out.println("Validation result: " + isValidUser.apply(invalidUser));  // NAME_EMPTY
+    }
+}
+
 ```
