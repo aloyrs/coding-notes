@@ -1,7 +1,6 @@
 ### 🧩 Concept
 
 The **Command Pattern** turns a **request or action into an object**.
-This lets you **parameterize**, **queue**, **log**, or **undo** actions easily.
 
 > 👉 It decouples the **object that issues a request (Invoker)**
 > from the **object that performs it (Receiver)**.
