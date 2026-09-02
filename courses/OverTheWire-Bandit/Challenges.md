@@ -4,10 +4,7 @@
 
 # connect remotely with username , hostname and port , will be prompted by password 
 ssh bandit0@bandit.labs.overthewire.org -p 2220
-```
 
-# Level 1
-```bash
 #password
 6y2kwnwK6grgvwvpvLaa2T1cpFEKOhNR
 ```
@@ -51,4 +48,14 @@ find . -name "file.txt"          # Find files named "file.txt" in current direct
 find . -type f -size 1033c       # Find regular files (-type f) of exact size 1033 bytes (c)
 find /var -user bandit1          # Search /var for files owned by user "bandit1"
 find . -type f -not -executable  # Find files that are regular files and NOT executable
+```
+
+# Level 1
+
+```bash
+# for special char like '-' 
+cat ./-
+
+# Password 
+PK8fYLZg2hnHSz83plBL1iEPKdD3QToB
 ```
