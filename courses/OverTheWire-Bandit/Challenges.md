@@ -42,3 +42,38 @@ cat ./--spaces\ in\ this\ filename-- 
 
 xzTXq1rDJQVVAzdv5cHq1TQytTWufAMq
 ```
+
+# Level 4
+```bash
+**bandit4@bandit**:**~/inhere**$ file ./*
+
+./-file00: data
+
+./-file01: data
+
+./-file02: data
+
+./-file03: data
+
+./-file04: data
+
+./-file05: data
+
+./-file06: OpenPGP Public Key
+
+./-file07: ASCII text
+
+./-file08: data
+
+./-file09: Motorola S-Record; binary data in text format
+
+**bandit4@bandit**:**~/inhere**$ cat ./-file07
+
+6C7h9GD8M6ai5nr7wo1RonrzFjj9yIrG
+```
+
+# Level 5
+
+```bash
+
+```
