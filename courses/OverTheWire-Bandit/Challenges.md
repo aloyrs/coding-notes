@@ -33,3 +33,12 @@ cat ./--spaces\ in\ this\ filename-- 
 
 # Level 3
 
+```bash
+**bandit3@bandit**:**~/inhere**$ ls -a
+
+**.**  **..**  ...Hiding-From-You
+
+**bandit3@bandit**:**~/inhere**$ cat ...Hiding-From-You 
+
+xzTXq1rDJQVVAzdv5cHq1TQytTWufAMq
+```
