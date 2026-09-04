@@ -123,3 +123,15 @@ data.txt
 ```
 
 # Level 8
+
+```bash
+**bandit8@bandit**:**~**$ sort data.txt | uniq -u
+
+EjmOSvuAu7sGAHqHVcBDPirRe9T03kxl
+```
+
+# Level 9
+
+```bash
+
+```
