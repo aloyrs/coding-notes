@@ -42,4 +42,31 @@ find /var -user bandit1          # Search /var for files owned by user "bandit1"
 find . -type f -not -executable  # Find files that are regular files and NOT executable
 ```
 
-# Level 1
+# Level 6
+
+**How It Works**
+
+- `/`: Searches the entire filesystem from the root directory down.
+    
+- `-user bandit7`: Filters for files owned by user `bandit7`.
+    
+- `-group bandit6`: Filters for files owned by group `bandit6`.
+    
+- `-size 33c`: Restricts results to files that are exactly 33 bytes (`c` = bytes).
+    
+- `2>/dev/null`: Redirects standard error (stderr) to `/dev/null`, muting all "Permission denied" messages so only the matching file path is printed.
+
+
+**Anatomy of `2>/dev/null`**
+
+- **`2` (Standard Error / `stderr`):** Linux uses numeric File Descriptors to handle data streams:
+    
+    - **`0`**: `stdin` (Standard Input — keyboard input)
+        
+    - **`1`**: `stdout` (Standard Output — normal command results)
+        
+    - **`2`**: `stderr` (Standard Error — error messages)
+        
+- **`>` (Redirection Operator):** Takes the output stream on the left and sends it to the location on the right.
+    
+- **`/dev/null` (The Null Device):** A special file in Linux that discards all data written to it. It acts as a digital paper shredder or black hole.
