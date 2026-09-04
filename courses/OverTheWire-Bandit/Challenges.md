@@ -124,6 +124,8 @@ data.txt
 
 # Level 8
 
+The password for the next level is stored in the file **data.txt** and is the only line of text that occurs only once
+
 ```bash
 **bandit8@bandit**:**~**$ sort data.txt | uniq -u
 
@@ -132,6 +134,16 @@ EjmOSvuAu7sGAHqHVcBDPirRe9T03kxl
 
 # Level 9
 
-```bash
+The password for the next level is stored in the file **data.txt** in one of the few human-readable strings, preceded by several ‘=’ characters.
 
+```bash
+**bandit9@bandit**:**~**$ strings data.txt | grep "=="
+
+cL0**==========** the
+
+**==========** password
+
+>**==========** is
+
+R**==========** B0s2khmbT9u0geKuOoVGW3JZKhndE3BG
 ```
