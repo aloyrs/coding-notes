@@ -70,3 +70,70 @@ find . -type f -not -executable  # Find files that are regular files and NOT exe
 - **`>` (Redirection Operator):** Takes the output stream on the left and sends it to the location on the right.
     
 - **`/dev/null` (The Null Device):** A special file in Linux that discards all data written to it. It acts as a digital paper shredder or black hole.
+
+
+# More
+
+**Linux Text Processing & File Analysis Cheat Sheet**
+
+**Text Processing & Searching**
+
+* **`grep`** – Search text for matching patterns.
+* `grep "pattern" file.txt` *(Search for exact string)*
+* `grep -i "pattern" file.txt` *(Case-insensitive search)*
+* `grep -rn "pattern" .` *(Recursive search with line numbers)*
+
+
+* **`sort`** – Order lines of text alphabetically or numerically.
+* `sort file.txt` *(Standard alphabetical sort)*
+* `sort -n file.txt` *(Numerical sort)*
+* `sort -r file.txt` *(Reverse sort)*
+
+
+* **`uniq`** – Filter adjacent matching lines *(requires `sort` first)*.
+* `sort file.txt | uniq` *(Remove duplicates)*
+* `sort file.txt | uniq -u` *(Print ONLY unique lines that appear once)*
+* `sort file.txt | uniq -c` *(Count occurrences of each line)*
+
+
+* **`tr`** – Translate, replace, or delete characters from standard input.
+* `cat file.txt | tr 'a-z' 'A-Z'` *(Convert to uppercase)*
+* `cat file.txt | tr -d '\r'` *(Delete specific characters)*
+* `cat file.txt | tr 'A-Za-z' 'N-ZA-Mn-za-m'` *(Decode ROT13 cipher)*
+
+
+
+**Binary Inspection & Encoding**
+
+* **`strings`** – Extract printable human-readable text from binary files.
+* `strings file.bin` *(Print ASCII strings found inside)*
+* `strings -n 8 file.bin` *(Print strings with minimum length of 8)*
+
+
+* **`base64`** – Encode or decode Base64 data streams.
+* `base64 file.txt` *(Encode data to Base64)*
+* `base64 -d encoded.txt` *(Decode Base64 back to raw text/data)*
+
+
+* **`xxd`** – Create a hex dump of a file or convert hex dumps back to binary.
+* `xxd file.bin` *(View hex and ASCII representation)*
+* `xxd -r hex.txt > output.bin` *(Reverse hex dump back to binary)*
+
+
+
+**Archives & Compression**
+
+* **`tar`** – Bundle multiple files into a single archive file.
+* `tar -cvf archive.tar dir/` *(Create tar archive)*
+* `tar -xvf archive.tar` *(Extract tar archive)*
+* `tar -ztvf archive.tar.gz` *(List contents of gzipped archive)*
+
+
+* **`gzip`** – Compress or decompress files using standard LZ77 (`.gz`).
+* `gzip file.txt` *(Compresses into `file.txt.gz`)*
+* `gzip -d file.gz` *(Decompress file)*
+
+
+* **`bzip2`** – High-ratio file compression (`.bz2`).
+* `bzip2 file.txt` *(Compresses into `file.txt.bz2`)*
+* `bzip2 -d file.bz2` *(Decompress file)*
