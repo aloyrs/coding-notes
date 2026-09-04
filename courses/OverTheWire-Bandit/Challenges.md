@@ -75,5 +75,11 @@ xzTXq1rDJQVVAzdv5cHq1TQytTWufAMq
 # Level 5
 
 ```bash
+**bandit5@bandit**:**~/inhere**$ find -type f -size 1033c ! -executable
 
+./maybehere07/.file2
+
+**bandit5@bandit**:**~/inhere**$ cat ./maybehere07/.file2
+
+pXa26xhMWaC2SvDotA4r9EgZkulOeSBW
 ```
