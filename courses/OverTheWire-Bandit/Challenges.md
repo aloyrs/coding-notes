@@ -96,3 +96,28 @@ The password for the next level is stored **somewhere on the server** and has 
 - owned by user bandit7
 - owned by group bandit6
 - 33 bytes in size
+
+```bash
+**bandit6@bandit**:**/home**$ find / -user bandit7 -group bandit6 -size 33c 2>/dev/null
+
+/var/lib/dpkg/info/bandit7.password
+
+**bandit6@bandit**:**/home**$ cat /var/lib/dpkg/info/bandit7.password
+
+Bmnnvf82KzQlfxgAI2d1zYbr1u9pr3E3
+```
+
+**How It Works**
+
+- `/`: Searches the entire filesystem from the root directory down.
+    
+- `-user bandit7`: Filters for files owned by user `bandit7`.
+    
+- `-group bandit6`: Filters for files owned by group `bandit6`.
+    
+- `-size 33c`: Restricts results to files that are exactly 33 bytes (`c` = bytes).
+    
+- `2>/dev/null`: Redirects standard error (stderr) to `/dev/null`, muting all "Permission denied" messages so only the matching file path is printed.
+
+# Level 7
+
