@@ -182,13 +182,15 @@
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
       "command-palette:Open command palette": false,
-      "bases:Create new base": false
+      "bases:Create new base": false,
+      "obsidian-git:Open Git source control": false
     }
   },
   "active": "c4fa656c3247fc0c",
   "lastOpenFiles": [
-    "system-design/system-design.md",
+    "courses/OverTheWire-Bandit/Notes.md",
     "courses/OverTheWire-Bandit/Challenges.md",
+    "system-design/system-design.md",
     "courses/Over.md",
     "courses/OverTheWire-Bandit",
     "computer-networking/Untitled 3.png",
