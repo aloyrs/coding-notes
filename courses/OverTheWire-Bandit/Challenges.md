@@ -74,6 +74,11 @@ xzTXq1rDJQVVAzdv5cHq1TQytTWufAMq
 
 # Level 5
 
+The password for the next level is stored in a file somewhere under the **inhere** directory and has all of the following properties:
+- human-readable
+- 1033 bytes in size
+- not executable
+
 ```bash
 **bandit5@bandit**:**~/inhere**$ find -type f -size 1033c ! -executable
 
@@ -83,3 +88,11 @@ xzTXq1rDJQVVAzdv5cHq1TQytTWufAMq
 
 pXa26xhMWaC2SvDotA4r9EgZkulOeSBW
 ```
+
+# Level 6
+
+The password for the next level is stored **somewhere on the server** and has all of the following properties:
+
+- owned by user bandit7
+- owned by group bandit6
+- 33 bytes in size
