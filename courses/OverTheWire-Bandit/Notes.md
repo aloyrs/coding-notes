@@ -1,246 +1,343 @@
-# OverTheWire Bandit — Notes
+# Terminal Cheat Sheet (from OverTheWire Bandit)
 
-Command reference built up while working through the Bandit levels, grouped by what the commands do. The level where each one first becomes useful is noted in brackets.
+Commands and the file types they act on. Scope: what a full-stack dev / home-server admin (Unraid, Docker, PostgreSQL) actually uses. Stopping point is Bandit **Level 15**; sections marked **[not in Bandit]** fill gaps the wargame never covers.
 
 ## Contents
 
-1. [Navigating and reading files](#1-navigating-and-reading-files)
-2. [Finding files](#2-finding-files)
-3. [Redirection and `2>/dev/null`](#3-redirection-and-2devnull)
-4. [Searching and processing text](#4-searching-and-processing-text)
-5. [Binary inspection and encoding](#5-binary-inspection-and-encoding)
-6. [Archives and compression](#6-archives-and-compression)
-7. [Level 12 walkthrough — peeling compression layers](#7-level-12-walkthrough--peeling-compression-layers)
+1. [Mental model: streams, pipes, quoting](#1-mental-model-streams-pipes-quoting)
+2. [Navigate and read](#2-navigate-and-read)
+3. [Identify file types](#3-identify-file-types)
+4. [Find files](#4-find-files)
+5. [Search and transform text](#5-search-and-transform-text)
+6. [Encoding and binary](#6-encoding-and-binary)
+7. [Archives and compression](#7-archives-and-compression)
+8. [SSH, keys, and ports (Levels 13-15)](#8-ssh-keys-and-ports-levels-13-15)
+9. [Permissions and processes [not in Bandit]](#9-permissions-and-processes-not-in-bandit)
+10. [Daily-driver extras [not in Bandit]](#10-daily-driver-extras-not-in-bandit)
+11. [Recipes](#11-recipes)
 
 ---
 
-## 1. Navigating and reading files
+## 1. Mental model: streams, pipes, quoting
 
-*[Levels 0–4]*
-
-### `ls` — list directory contents
+| Number | Name | Carries |
+| --- | --- | --- |
+| `0` | stdin | Input |
+| `1` | stdout | Normal output |
+| `2` | stderr | Errors |
 
 ```bash
-ls        # List non-hidden files and directories
-ls -l     # Long format: permissions, owner, size, modification date
-ls -a     # Include hidden files (names starting with .)
-ls -la    # Long format + hidden files (most common usage)
-ls -lh    # Human-readable sizes (1K, 234M, 2G)
+cmd > out.txt          # stdout to file (overwrite)
+cmd >> out.txt         # stdout to file (append)
+cmd 2>/dev/null        # discard errors (e.g. "Permission denied" noise from find /)
+cmd > out.txt 2>&1     # stdout + stderr to the same file
+cmd1 | cmd2            # feed stdout of cmd1 into stdin of cmd2
+cmd1 && cmd2           # run cmd2 only if cmd1 succeeded
+cd $(mktemp -d)        # $(...) = substitute the command's output; here, a scratch dir
 ```
 
-### `cd` — change directory
+**Awkward filenames** (Levels 1-3):
+
+| Problem | Fix |
+| --- | --- |
+| Name starts with `-` (read as a flag) | `cat ./-file` or `cat -- -file` |
+| Spaces in name | `cat "my file"` or `cat my\ file` |
+| Hidden (starts with `.`) | `ls -a` |
+
+---
+
+## 2. Navigate and read
 
 ```bash
-cd /path/to/folder   # Go to a specific path
-cd ..                # Up one level (parent directory)
-cd ../..             # Up two levels
-cd ~                 # Home directory
-cd -                 # Back to the previous working directory
-```
-
-### `cat` — print file contents
-
-```bash
-cat filename.txt           # Print the whole file to stdout
-cat file1.txt file2.txt    # Print several files one after another
-cat -n filename.txt        # Print with line numbers
-```
-
-### `file` — identify the real file type
-
-```bash
-file filename    # Reads the magic bytes and reports the actual format
-```
-
-Example outputs: `ASCII text`, `data`, `gzip compressed data`, `ELF 64-bit executable`.
-
-### `du` — disk usage
-
-```bash
-du -h            # Space used by the current directory and subdirectories
-du -sh *         # One summary line (-s) per item in the current directory
-du -sh /var/log  # Total size of a specific directory
+ls -lah               # long + hidden + human sizes (the one you want)
+cd -                  # back to previous directory
+cat f                 # print file
+cat -n f              # with line numbers
+less f                # scroll a big file (q quits, /text searches)
+head -n 20 f          # first 20 lines
+tail -n 50 f          # last 50 lines
+tail -f f             # follow a growing file (live logs)  [not in Bandit]
+wc -l f               # count lines  [not in Bandit]
+du -sh *              # size of each item here
+du -sh * | sort -h    # ...largest last
+df -h                 # free space per disk/mount  [not in Bandit]
 ```
 
 ---
 
-## 2. Finding files
+## 3. Identify file types
 
-*[Levels 5–6]*
-
-### `find` — search a directory tree
+`file` reads the **magic bytes**, not the extension. Trust it over the filename.
 
 ```bash
-find . -name "file.txt"           # By name, in the current directory and below
-find . -type f -size 1033c        # Regular files of exactly 1033 bytes
-find /var -user bandit1           # Files under /var owned by user bandit1
-find . -type f -not -executable   # Regular files that are NOT executable
+file f        # what is this really?
+file ./*      # check a whole directory (Level 4)
 ```
 
-### Common filters
+| `file` output | What it is | Open / use with |
+| --- | --- | --- |
+| `ASCII text`, `UTF-8 text` | Plain text (logs, `.env`, configs, JSON, SQL) | `cat`, `less`, `grep` |
+| `data` | Unknown/binary blob | `xxd`, `strings` |
+| `gzip compressed data` | `.gz` | `gzip -d`, `zcat` |
+| `bzip2 compressed data` | `.bz2` | `bzip2 -d`, `bzcat` |
+| `POSIX tar archive` | `.tar` | `tar -xf` |
+| `Zip archive data` | `.zip` | `unzip` |
+| `ELF 64-bit executable` | Compiled Linux binary | `strings`, run it |
+| `OpenSSH private key` / `PEM RSA private key` | SSH identity (`id_rsa`) | `ssh -i`, needs `chmod 600` |
+| `OpenPGP Public Key` | GPG key | `gpg` |
+| `Motorola S-Record` | Firmware-style hex text | `xxd -r` |
+| `symbolic link to X` | Symlink | `readlink -f f` |
+
+---
+
+## 4. Find files
+
+```bash
+find . -name "*.log"                     # by name (quote the glob)
+find . -type f -size 1033c               # regular file, exactly 1033 bytes
+find . -type f -size +100M               # bigger than 100 MB  [not in Bandit]
+find . -type f -not -executable          # NOT executable (same as ! -executable)
+find / -user bandit7 -group bandit6 -size 33c 2>/dev/null
+find . -mtime -1                         # modified in last day  [not in Bandit]
+find . -name "*.log" -delete             # careful: deletes matches  [not in Bandit]
+find . -name "*.tmp" -exec rm {} +       # run a command on each match  [not in Bandit]
+```
 
 | Filter | Meaning |
 | --- | --- |
-| `.` or `/` | Where to start: current directory, or the whole filesystem from root |
-| `-name "x"` | File name matches `x` |
-| `-type f` | Regular files only |
-| `-size 33c` | Exactly 33 bytes (`c` = bytes) |
-| `-user bandit7` | Owned by user `bandit7` |
-| `-group bandit6` | Owned by group `bandit6` |
-| `-not -executable` | Not executable |
+| `-type f` / `-type d` | file / directory |
+| `-name` / `-iname` | name glob (case-sens / insens) |
+| `-size 33c` `+1M` `-10k` | `c` bytes, `k`, `M`, `G`; `+` bigger, `-` smaller |
+| `-user` `-group` | owner / group |
+| `-perm 644` | exact permission bits |
+| `-executable` | executable by you |
 
-### Level 6 solution
-
-Find a file anywhere on the server that is owned by user `bandit7`, group `bandit6`, and is 33 bytes:
-
-```bash
-find / -user bandit7 -group bandit6 -size 33c 2>/dev/null
-```
-
-Searching from `/` hits many directories you cannot read, so `2>/dev/null` hides the "Permission denied" messages and leaves only the matching path (explained in the next section).
+Always start from `.` or a path. Searching `/` needs `2>/dev/null`.
 
 ---
 
-## 3. Redirection and `2>/dev/null`
+## 5. Search and transform text
 
-*[Level 6]*
-
-Linux gives every process three numbered data streams (file descriptors):
-
-| Number | Name | What it carries |
-| --- | --- | --- |
-| `0` | `stdin` | Input (keyboard) |
-| `1` | `stdout` | Normal command output |
-| `2` | `stderr` | Error messages |
-
-Breaking down `2>/dev/null`:
-
-- **`2`** — the stream to redirect: `stderr`.
-- **`>`** — the redirection operator: send the stream on the left to the location on the right.
-- **`/dev/null`** — the null device, a special file that discards everything written to it (a black hole).
-
-Result: errors are thrown away, normal output still prints.
-
----
-
-## 4. Searching and processing text
-
-*[Levels 7–11]*
-
-### `grep` — search text for a pattern
+### `grep`
 
 ```bash
-grep "pattern" file.txt      # Lines containing the pattern
-grep -i "pattern" file.txt   # Case-insensitive
-grep -rn "pattern" .         # Recursive, with line numbers
+grep "millionth" data.txt      # lines containing it
+grep -i err app.log            # case-insensitive
+grep -rn "TODO" .              # recursive, with filename:line
+grep -v "DEBUG" app.log        # invert: lines NOT matching
+grep -E "error|fatal" app.log  # regex alternation
+grep -C 3 "exception" app.log  # 3 lines of context around matches
 ```
 
-### `sort` — order lines
+### `sort` / `uniq` (uniq only sees **adjacent** lines, so sort first)
 
 ```bash
-sort file.txt      # Alphabetical
-sort -n file.txt   # Numerical
-sort -r file.txt   # Reversed
+sort f                    # alphabetical
+sort -n f                 # numeric
+sort -r f                 # reverse
+sort f | uniq             # dedupe
+sort f | uniq -u          # lines that appear exactly once (Level 8)
+sort f | uniq -c | sort -rn | head   # top-N most frequent lines
 ```
 
-### `uniq` — filter repeated lines
-
-`uniq` only compares **adjacent** lines, so always `sort` first.
+### `tr` (stdin only)
 
 ```bash
-sort file.txt | uniq      # Remove duplicates
-sort file.txt | uniq -u   # Only lines that appear exactly once
-sort file.txt | uniq -c   # Count occurrences of each line
+cat f | tr 'a-z' 'A-Z'                 # uppercase
+cat f | tr -d '\r'                     # strip Windows line endings
+cat f | tr 'A-Za-z' 'N-ZA-Mn-za-m'     # ROT13 (Level 11)
 ```
 
-### `tr` — translate or delete characters
-
-`tr` reads from standard input only, so pipe the file into it.
+### `cut`, `awk`, `sed`, `xargs`  **[not in Bandit, but daily use]**
 
 ```bash
-cat file.txt | tr 'a-z' 'A-Z'                 # Convert to uppercase
-cat file.txt | tr -d '\r'                     # Delete specific characters
-cat file.txt | tr 'A-Za-z' 'N-ZA-Mn-za-m'     # Decode ROT13
+cut -d',' -f2 data.csv           # 2nd comma-separated column
+awk '{print $1, $NF}' f          # first and last whitespace-separated field
+awk -F: '{print $1}' /etc/passwd # custom delimiter
+sed 's/old/new/g' f              # substitute (prints result)
+sed -i 's/old/new/g' f           # edit in place (macOS needs: sed -i '' ...)
+cmd | xargs -n1 echo             # turn lines into arguments
+```
+
+### `jq` for JSON  **[not in Bandit; install it]**
+
+```bash
+curl -s api/url | jq .                  # pretty-print
+curl -s api/url | jq '.items[].name'    # pluck fields
+docker inspect ctr | jq '.[0].Mounts'
 ```
 
 ---
 
-## 5. Binary inspection and encoding
-
-*[Levels 9–12]*
-
-### `strings` — pull readable text out of a binary
+## 6. Encoding and binary
 
 ```bash
-strings file.bin        # Print the ASCII strings found inside
-strings -n 8 file.bin   # Only strings at least 8 characters long
+strings data.bin | grep "=="     # readable text inside a binary (Level 9)
+strings -n 8 data.bin            # only strings >= 8 chars
+
+base64 file > file.b64           # encode
+base64 -d file.b64               # decode (Level 10). JWT/API payloads are base64
+echo 'dGVzdA==' | base64 -d      # decode a string
+
+xxd file | head                  # hex + ASCII view
+xxd -r hex.txt > out.bin         # reverse a hex dump to binary (Level 12)
 ```
 
-### `base64` — encode / decode Base64
-
-```bash
-base64 file.txt          # Encode
-base64 -d encoded.txt    # Decode back to raw data
-```
-
-### `xxd` — hex dumps
-
-```bash
-xxd file.bin                     # View hex + ASCII representation
-xxd -r hex.txt > output.bin      # Reverse a hex dump back to binary
-```
-
----
-
-## 6. Archives and compression
-
-*[Level 12]*
-
-| Tool | Extension | Purpose |
-| --- | --- | --- |
-| `tar` | `.tar` | Bundles many files into one archive (no compression by itself) |
-| `gzip` | `.gz` | Standard LZ77 compression |
-| `bzip2` | `.bz2` | Higher-ratio compression |
-
-### `tar`
-
-```bash
-tar -cvf archive.tar dir/      # Create an archive
-tar -xvf archive.tar           # Extract an archive
-tar -ztvf archive.tar.gz       # List contents of a gzipped archive
-```
-
-### `gzip`
-
-```bash
-gzip file.txt      # Compress into file.txt.gz
-gzip -d file.gz    # Decompress
-```
-
-### `bzip2`
-
-```bash
-bzip2 file.txt      # Compress into file.txt.bz2
-bzip2 -d file.bz2   # Decompress
-```
-
-**Tip:** when a file has been compressed several times over, run `file` on it after each step to see which tool to use next.
-
----
-
-## 7. Level 12 — peeling compression layers
-
-*[Level 12 → 13]*
-
-`data.txt` is a hex dump of a repeatedly compressed file. Work in `cd $(mktemp -d)`, `cp` the file in, run `xxd -r data.txt data`, then loop: **`file` → rename to match → undo** until it says `ASCII text`.
-
-Layers: `hex → gzip → bzip2 → gzip → tar → tar → bzip2 → tar → gzip → text`
-
-| `file` says | Undo with |
+| Input file | Tool |
 | --- | --- |
-| `gzip compressed data` | `mv f f.gz && gzip -d f.gz` |
-| `bzip2 compressed data` | `bzip2 -d f` (output: `f.out`) |
-| `POSIX tar archive` | `tar -xf f` (adds a new file; keep going with that one) |
-| `ASCII text` | `cat f` — done |
+| Binary with some text inside | `strings` |
+| Base64 text (`...==`) | `base64 -d` |
+| Hex dump text | `xxd -r` |
+| ROT13 text | `tr` |
 
-**Gotchas:** trust `file`, not the extension; `gzip -d` needs a `.gz` name; `tar -xf` keeps the old archive, so `ls` for the new file.
+---
+
+## 7. Archives and compression
+
+| Extension | Made by | Undo with |
+| --- | --- | --- |
+| `.tar` | `tar -cf` | `tar -xf` |
+| `.gz` | `gzip` | `gzip -d` |
+| `.bz2` | `bzip2` | `bzip2 -d` |
+| `.tar.gz` / `.tgz` | `tar -czf` | `tar -xzf` |
+| `.tar.bz2` | `tar -cjf` | `tar -xjf` |
+| `.zip` | `zip -r` | `unzip` |
+
+```bash
+tar -czf backup.tar.gz dir/      # create a gzipped archive
+tar -xzf backup.tar.gz           # extract
+tar -xzf backup.tar.gz -C /dest  # extract into a directory
+tar -tzf backup.tar.gz           # list contents without extracting
+gzip -d f.gz                     # decompress (needs .gz name)
+bzip2 -d f.bz2                   # decompress (output keeps name minus .bz2)
+zip -r out.zip dir/ ; unzip out.zip
+```
+
+**Level 12 loop** (repeatedly compressed file): work in `cd $(mktemp -d)`, `xxd -r data.txt data`, then repeat **`file` -> rename to match -> decompress** until `ASCII text`.
+
+| `file` says | Do |
+| --- | --- |
+| gzip | `mv f f.gz && gzip -d f.gz` |
+| bzip2 | `mv f f.bz2 && bzip2 -d f.bz2` |
+| POSIX tar | `tar -xf f` (creates a NEW file; continue with that one) |
+| ASCII text | `cat f`, done |
+
+Gotchas: `gzip -d` refuses a name without `.gz`; `tar -xf` leaves the old archive behind, so `ls` to spot the new file.
+
+---
+
+## 8. SSH, keys, and ports (Levels 13-15)
+
+*Not yet done in the wargame. Commands below are from the level goals, not your own solves.*
+
+```bash
+ssh user@host -p 2220                    # connect on a non-default port (Level 0)
+ssh -i ~/.ssh/id_rsa user@host           # log in with a private key (Level 13)
+ssh user@host 'ls /var/log'              # run one command remotely, then exit
+scp file user@host:/path/                # copy to remote  [not in Bandit]
+scp user@host:/path/file .               # copy from remote
+ssh-keygen -t ed25519                    # make a key pair  [not in Bandit]
+ssh-copy-id user@host                    # install your public key  [not in Bandit]
+```
+
+**Key files:** private key = `id_rsa` / `id_ed25519` (never share); public key = `.pub`; allowed keys on the server = `~/.ssh/authorized_keys`. SSH **refuses a private key that is readable by others**:
+
+```bash
+chmod 600 ~/.ssh/id_rsa
+```
+
+**Talking to a port** (Level 14):
+
+```bash
+nc localhost 30000                       # open a raw TCP connection, type input
+echo "secret" | nc localhost 30000       # pipe a string into a port
+nc -zv host 5432                         # is the port open? (Postgres check)  [not in Bandit]
+```
+
+**Talking to a TLS port** (Level 15; `nc` can't do TLS):
+
+```bash
+openssl s_client -connect localhost:30001      # TLS client; type/pipe your input
+echo "secret" | openssl s_client -connect localhost:30001 -quiet
+```
+
+Passwords for the next level live in `/etc/bandit_pass/banditN` (readable only by that user).
+
+---
+
+## 9. Permissions and processes [not in Bandit]
+
+Bandit only *reads* permissions (`find -user`, `ls -l`). You also need to change them.
+
+```bash
+ls -l f
+# -rwxr-xr--  1 owner group ...
+#  |\_/\_/\_/   r=4 w=2 x=1 for owner / group / others
+
+chmod 600 f              # owner rw only (SSH keys, .env)
+chmod 644 f              # owner rw, others read
+chmod 755 f              # executable script/dir
+chmod +x script.sh       # make executable
+chown user:group f       # change owner (needs sudo)
+chown -R 99:100 dir/     # Unraid default appdata owner is nobody:users
+sudo cmd                 # run as root
+```
+
+```bash
+ps aux | grep nginx      # find a process
+top    # or htop         # live CPU/RAM
+kill PID ; kill -9 PID   # stop (polite / force)
+ss -tulpn                # what is listening on which port (netstat replacement)
+lsof -i :5432            # who owns port 5432
+journalctl -u docker -f  # service logs (systemd distros; Unraid uses /var/log/syslog)
+```
+
+---
+
+## 10. Daily-driver extras [not in Bandit]
+
+```bash
+# Docker
+docker ps -a                       # containers
+docker logs -f --tail 100 ctr      # follow logs
+docker exec -it ctr sh             # shell inside container
+docker inspect ctr                 # volumes, env, networks (pipe to jq)
+docker compose up -d / down / logs -f
+
+# PostgreSQL
+psql -h host -U user -d db         # connect
+psql -c "SELECT now();"            # one-off query
+pg_dump -U user db > db.sql        # backup (a plain SQL text file)
+psql -U user db < db.sql           # restore
+
+# HTTP
+curl -s url                        # GET
+curl -i url                        # include headers
+curl -X POST -H "Content-Type: application/json" -d '{"a":1}' url
+
+# Sessions and scheduling
+tmux new -s main ; tmux attach -t main   # session survives disconnects
+crontab -e                               # schedule jobs (min hour dom mon dow cmd)
+rsync -avh --progress src/ user@host:dst/   # smarter copy than scp
+```
+
+---
+
+## 11. Recipes
+
+```bash
+# Top 10 IPs in an access log
+awk '{print $1}' access.log | sort | uniq -c | sort -rn | head
+
+# Errors in the last 1000 lines
+tail -n 1000 app.log | grep -i error
+
+# Find big files hogging space
+du -sh * | sort -h | tail
+
+# Find where a string is used in a project
+grep -rn "DATABASE_URL" . --include="*.env*" --include="*.yml"
+
+# Peel a stack of compressed layers
+file f   # then gzip -d / bzip2 -d / tar -xf as `file` dictates, repeat
+```
