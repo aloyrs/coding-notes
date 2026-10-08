@@ -164,5 +164,5 @@ The password is pYfOY6HwUsDj5rL9UvyhU7MCmv8vN5Ro
 
 # Level 12
 ```shell
-
+The password is qQYQiHOBPR8zR61qxYqX45quvihF2uzk
 ```
