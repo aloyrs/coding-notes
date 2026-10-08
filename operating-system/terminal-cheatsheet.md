@@ -4,27 +4,27 @@ Everything a full-stack dev / home-server admin (Unraid, Docker, PostgreSQL) nee
 
 ## I want to... (jump table)
 
-| I want to... | Use | Section |
-| --- | --- | --- |
-| Move around, see what's here | `ls -lah`, `cd`, `pwd` | [1](#1-navigate--manage-files) |
-| Copy / move / delete / make files | `cp`, `mv`, `rm`, `mkdir`, `touch` | [1](#1-navigate--manage-files) |
-| Read a file or a log | `cat`, `less`, `head`, `tail -f` | [2](#2-read-files) |
-| Know what a mystery file really is | `file`, `strings`, `xxd` | [3](#3-identify--inspect-files) |
-| Find a file by name/size/owner | `find` | [4](#4-find-files) |
-| Find text inside files | `grep -rn` | [5](#5-search-and-reshape-text) |
-| Slice columns / count / dedupe | `awk`, `cut`, `sort`, `uniq`, `wc` | [5](#5-search-and-reshape-text) |
-| Edit a file in place | `sed -i`, `nano`, `vim` | [5](#5-search-and-reshape-text) |
-| Pretty-print / query JSON | `jq` | [5](#5-search-and-reshape-text) |
-| Compress / extract | `tar`, `gzip`, `zip` | [6](#6-archives--compression) |
-| Fix "permission denied" | `chmod`, `chown`, `sudo` | [7](#7-permissions-and-users) |
-| See / kill what's running | `ps`, `top`, `kill`, `ss`, `lsof` | [8](#8-processes--system-health) |
-| Check disk / RAM | `df -h`, `du -sh`, `free -h` | [8](#8-processes--system-health) |
-| Hit an API / download | `curl`, `wget` | [9](#9-network) |
-| Log into / copy to a server | `ssh`, `scp`, `rsync` | [10](#10-remote-access-ssh) |
-| Work with containers | `docker`, `docker compose` | [11](#11-docker) |
-| Work with the database | `psql`, `pg_dump` | [12](#12-postgresql) |
-| Keep a session alive / schedule | `tmux`, `crontab` | [13](#13-sessions--scheduling) |
-| Chain commands together | `\|`, `>`, `&&`, `$(...)` | [0](#0-core-concepts) |
+| I want to...                       | Use                                | Section                          |
+| ---------------------------------- | ---------------------------------- | -------------------------------- |
+| Move around, see what's here       | `ls -lah`, `cd`, `pwd`             | [1](#1-navigate--manage-files)   |
+| Copy / move / delete / make files  | `cp`, `mv`, `rm`, `mkdir`, `touch` | [1](#1-navigate--manage-files)   |
+| Read a file or a log               | `cat`, `less`, `head`, `tail -f`   | [2](#2-read-files)               |
+| Know what a mystery file really is | `file`, `strings`, `xxd`           | [3](#3-identify--inspect-files)  |
+| Find a file by name/size/owner     | `find`                             | [4](#4-find-files)               |
+| Find text inside files             | `grep -rn`                         | [5](#5-search-and-reshape-text)  |
+| Slice columns / count / dedupe     | `awk`, `cut`, `sort`, `uniq`, `wc` | [5](#5-search-and-reshape-text)  |
+| Edit a file in place               | `sed -i`, `nano`, `vim`            | [5](#5-search-and-reshape-text)  |
+| Pretty-print / query JSON          | `jq`                               | [5](#5-search-and-reshape-text)  |
+| Compress / extract                 | `tar`, `gzip`, `zip`               | [6](#6-archives--compression)    |
+| Fix "permission denied"            | `chmod`, `chown`, `sudo`           | [7](#7-permissions-and-users)    |
+| See / kill what's running          | `ps`, `top`, `kill`, `ss`, `lsof`  | [8](#8-processes--system-health) |
+| Check disk / RAM                   | `df -h`, `du -sh`, `free -h`       | [8](#8-processes--system-health) |
+| Hit an API / download              | `curl`, `wget`                     | [9](#9-network)                  |
+| Log into / copy to a server        | `ssh`, `scp`, `rsync`              | [10](#10-remote-access-ssh)      |
+| Work with containers               | `docker`, `docker compose`         | [11](#11-docker)                 |
+| Work with the database             | `psql`, `pg_dump`                  | [12](#12-postgresql)             |
+| Keep a session alive / schedule    | `tmux`, `crontab`                  | [13](#13-sessions--scheduling)   |
+| Chain commands together            | `\|`, `>`, `&&`, `$(...)`          | [0](#0-core-concepts)            |
 
 ---
 
