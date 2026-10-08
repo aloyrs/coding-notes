@@ -10,6 +10,7 @@ Command reference built up while working through the Bandit levels, grouped by w
 4. [Searching and processing text](#4-searching-and-processing-text)
 5. [Binary inspection and encoding](#5-binary-inspection-and-encoding)
 6. [Archives and compression](#6-archives-and-compression)
+7. [Level 12 walkthrough — peeling compression layers](#7-level-12-walkthrough--peeling-compression-layers)
 
 ---
 
@@ -224,3 +225,59 @@ bzip2 -d file.bz2   # Decompress
 ```
 
 **Tip:** when a file has been compressed several times over, run `file` on it after each step to see which tool to use next.
+
+---
+
+## 7. Level 12 walkthrough — peeling compression layers
+
+*[Level 12 → 13]*
+
+`data.txt` is a hex dump of a file that was compressed many times. Reverse the hex dump once, then loop: **`file` → rename to match → decompress**.
+
+### What I did
+
+1. `cd $(mktemp -d)` — the home directory is read-only, so work in a temp directory.
+2. `cp ~/data.txt .` — copy the file in (`cp` needs a destination; `.` = here).
+3. `xxd -r data.txt data` — turn the hex dump back into a binary.
+4. Repeated `file <name>` and undid whatever it reported, until it said `ASCII text`.
+5. `cat data8` — read the password.
+
+Order of the layers:
+
+```
+hex dump → gzip → bzip2 → gzip → tar → tar → bzip2 → tar → gzip → ASCII text
+```
+
+### File types — what they are and what to do
+
+| `file` reports | What it is | Command to undo it |
+| --- | --- | --- |
+| Hex dump (`ASCII text` that looks like `00000000: 1f8b ...`) | A binary written out as readable hex text | `xxd -r in.txt out` |
+| `gzip compressed data` | One file compressed with gzip (`.gz`) | `mv f f.gz && gzip -d f.gz` |
+| `bzip2 compressed data` | One file compressed with bzip2 (`.bz2`) | `mv f f.bz2 && bzip2 -d f.bz2` |
+| `POSIX tar archive` | Several files bundled into one, not compressed | `tar -xf f` |
+| `ASCII text` | Plain readable text — the end | `cat f` |
+
+`.bin` is just a generic "binary" name and says nothing about the format — trust `file`, not the extension.
+
+### Commands used
+
+| Command | What it does |
+| --- | --- |
+| `mktemp -d` | Creates a random temp directory under `/tmp` and prints its path |
+| `cd $(mktemp -d)` | Creates it and moves into it in one go |
+| `cp src dest` | Copy a file |
+| `mv old new` | Rename (or move) a file |
+| `xxd -r` | Reverse a hex dump into a binary |
+| `file f` | Report the real format of a file |
+| `gzip -d` / `bzip2 -d` | Decompress; replaces the file in place |
+| `tar -xf` | Extract; keeps the archive and adds the extracted file next to it |
+
+### Mistakes to avoid
+
+- **Extension must match the real format.** Renaming a gzip file to `.bz2` makes both tools fail. Check with `file` before every rename.
+- **`gzip -d` needs a `.gz` name**, so rename first. `bzip2 -d` works without `.bz2` but names its output `<name>.out`.
+- **`was "data9.bin"` is not a file.** It is the original name stored inside the gzip header. Use the name `ls` shows.
+- **`tar -xf` leaves the old archive behind.** After extracting, run `ls` and continue with the *new* file.
+- **No space in filenames:** `file data 8.bin` checks two files, `data` and `8.bin`.
+- **Syntax:** `$(command)`, not `($ command)`.
