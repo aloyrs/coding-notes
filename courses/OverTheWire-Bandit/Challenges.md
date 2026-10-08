@@ -147,3 +147,12 @@ cL0**==========** the
 
 R**==========** B0s2khmbT9u0geKuOoVGW3JZKhndE3BG
 ```
+
+# Level 10
+```shell
+**bandit10@bandit**:**~**$ base64 data.txt 
+
+VkdobElIQmhjM04zYjNKa0lHbHpJSEJaWms5Wk5raDNWWE5FYWpWeVREbFZkbmxvVlRkTlEyMTJP
+
+SFpPTlZKdkNnPT0K
+```
