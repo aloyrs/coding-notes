@@ -1,139 +1,226 @@
-# Level 0
+# OverTheWire Bandit — Notes
 
+Command reference built up while working through the Bandit levels, grouped by what the commands do. The level where each one first becomes useful is noted in brackets.
+
+## Contents
+
+1. [Navigating and reading files](#1-navigating-and-reading-files)
+2. [Finding files](#2-finding-files)
+3. [Redirection and `2>/dev/null`](#3-redirection-and-2devnull)
+4. [Searching and processing text](#4-searching-and-processing-text)
+5. [Binary inspection and encoding](#5-binary-inspection-and-encoding)
+6. [Archives and compression](#6-archives-and-compression)
+
+---
+
+## 1. Navigating and reading files
+
+*[Levels 0–4]*
+
+### `ls` — list directory contents
 
 ```bash
-# --- 1. ls (List Directory Contents) ---
-ls                    # List non-hidden files and directories
-ls -l                 # Long listing format (permissions, owner, size, modification date)
-ls -a                 # List all files, including hidden files (starting with .)
-ls -la                # Combine long listing + all files (most common usage)
-ls -lh                # Human-readable sizes (e.g., 1K, 234M, 2G)
-
-
-# --- 2. cd (Change Directory) ---
-cd /path/to/folder    # Navigate to a specific directory path
-cd ..                 # Move up one level (parent directory)
-cd ../..              # Move up two levels
-cd ~                  # Navigate to your user's home directory
-cd -                  # Switch back to the previous working directory
-
-
-# --- 3. cat (Concatenate & Print File Contents) ---
-cat filename.txt      # Display the entire raw text of a file to stdout
-cat file1.txt file2.txt # Display multiple files concatenated together
-cat -n filename.txt   # Display file content with line numbers
-
-
-# --- 4. file (Determine File Type) ---
-file filename         # Inspect magic bytes to report the real file format
-                      # Output example: ASCII text, Data, Gzip compressed, ELF 64-bit executable
-
-
-# --- 5. du (Disk Usage) ---
-du -h                 # Display disk space used by current directory and subdirectories (human-readable)
-du -sh *              # Summary (-s) of size for each item in current directory
-du -sh /var/log       # Check total size of a specific directory
-
-
-# --- 6. find (Search Directory Tree) ---
-find . -name "file.txt"          # Find files named "file.txt" in current directory (.) and subfolders
-find . -type f -size 1033c       # Find regular files (-type f) of exact size 1033 bytes (c)
-find /var -user bandit1          # Search /var for files owned by user "bandit1"
-find . -type f -not -executable  # Find files that are regular files and NOT executable
+ls        # List non-hidden files and directories
+ls -l     # Long format: permissions, owner, size, modification date
+ls -a     # Include hidden files (names starting with .)
+ls -la    # Long format + hidden files (most common usage)
+ls -lh    # Human-readable sizes (1K, 234M, 2G)
 ```
 
-# Level 6
+### `cd` — change directory
 
-**How It Works**
+```bash
+cd /path/to/folder   # Go to a specific path
+cd ..                # Up one level (parent directory)
+cd ../..             # Up two levels
+cd ~                 # Home directory
+cd -                 # Back to the previous working directory
+```
 
-- `/`: Searches the entire filesystem from the root directory down.
-    
-- `-user bandit7`: Filters for files owned by user `bandit7`.
-    
-- `-group bandit6`: Filters for files owned by group `bandit6`.
-    
-- `-size 33c`: Restricts results to files that are exactly 33 bytes (`c` = bytes).
-    
-- `2>/dev/null`: Redirects standard error (stderr) to `/dev/null`, muting all "Permission denied" messages so only the matching file path is printed.
+### `cat` — print file contents
 
+```bash
+cat filename.txt           # Print the whole file to stdout
+cat file1.txt file2.txt    # Print several files one after another
+cat -n filename.txt        # Print with line numbers
+```
 
-**Anatomy of `2>/dev/null`**
+### `file` — identify the real file type
 
-- **`2` (Standard Error / `stderr`):** Linux uses numeric File Descriptors to handle data streams:
-    
-    - **`0`**: `stdin` (Standard Input — keyboard input)
-        
-    - **`1`**: `stdout` (Standard Output — normal command results)
-        
-    - **`2`**: `stderr` (Standard Error — error messages)
-        
-- **`>` (Redirection Operator):** Takes the output stream on the left and sends it to the location on the right.
-    
-- **`/dev/null` (The Null Device):** A special file in Linux that discards all data written to it. It acts as a digital paper shredder or black hole.
+```bash
+file filename    # Reads the magic bytes and reports the actual format
+```
 
+Example outputs: `ASCII text`, `data`, `gzip compressed data`, `ELF 64-bit executable`.
 
-# More
+### `du` — disk usage
 
-**Linux Text Processing & File Analysis Cheat Sheet**
+```bash
+du -h            # Space used by the current directory and subdirectories
+du -sh *         # One summary line (-s) per item in the current directory
+du -sh /var/log  # Total size of a specific directory
+```
 
-**Text Processing & Searching**
+---
 
-* **`grep`** – Search text for matching patterns.
-* `grep "pattern" file.txt` *(Search for exact string)*
-* `grep -i "pattern" file.txt` *(Case-insensitive search)*
-* `grep -rn "pattern" .` *(Recursive search with line numbers)*
+## 2. Finding files
 
+*[Levels 5–6]*
 
-* **`sort`** – Order lines of text alphabetically or numerically.
-* `sort file.txt` *(Standard alphabetical sort)*
-* `sort -n file.txt` *(Numerical sort)*
-* `sort -r file.txt` *(Reverse sort)*
+### `find` — search a directory tree
 
+```bash
+find . -name "file.txt"           # By name, in the current directory and below
+find . -type f -size 1033c        # Regular files of exactly 1033 bytes
+find /var -user bandit1           # Files under /var owned by user bandit1
+find . -type f -not -executable   # Regular files that are NOT executable
+```
 
-* **`uniq`** – Filter adjacent matching lines *(requires `sort` first)*.
-* `sort file.txt | uniq` *(Remove duplicates)*
-* `sort file.txt | uniq -u` *(Print ONLY unique lines that appear once)*
-* `sort file.txt | uniq -c` *(Count occurrences of each line)*
+### Common filters
 
+| Filter | Meaning |
+| --- | --- |
+| `.` or `/` | Where to start: current directory, or the whole filesystem from root |
+| `-name "x"` | File name matches `x` |
+| `-type f` | Regular files only |
+| `-size 33c` | Exactly 33 bytes (`c` = bytes) |
+| `-user bandit7` | Owned by user `bandit7` |
+| `-group bandit6` | Owned by group `bandit6` |
+| `-not -executable` | Not executable |
 
-* **`tr`** – Translate, replace, or delete characters from standard input.
-* `cat file.txt | tr 'a-z' 'A-Z'` *(Convert to uppercase)*
-* `cat file.txt | tr -d '\r'` *(Delete specific characters)*
-* `cat file.txt | tr 'A-Za-z' 'N-ZA-Mn-za-m'` *(Decode ROT13 cipher)*
+### Level 6 solution
 
+Find a file anywhere on the server that is owned by user `bandit7`, group `bandit6`, and is 33 bytes:
 
+```bash
+find / -user bandit7 -group bandit6 -size 33c 2>/dev/null
+```
 
-**Binary Inspection & Encoding**
+Searching from `/` hits many directories you cannot read, so `2>/dev/null` hides the "Permission denied" messages and leaves only the matching path (explained in the next section).
 
-* **`strings`** – Extract printable human-readable text from binary files.
-* `strings file.bin` *(Print ASCII strings found inside)*
-* `strings -n 8 file.bin` *(Print strings with minimum length of 8)*
+---
 
+## 3. Redirection and `2>/dev/null`
 
-* **`base64`** – Encode or decode Base64 data streams.
-* `base64 file.txt` *(Encode data to Base64)*
-* `base64 -d encoded.txt` *(Decode Base64 back to raw text/data)*
+*[Level 6]*
 
+Linux gives every process three numbered data streams (file descriptors):
 
-* **`xxd`** – Create a hex dump of a file or convert hex dumps back to binary.
-* `xxd file.bin` *(View hex and ASCII representation)*
-* `xxd -r hex.txt > output.bin` *(Reverse hex dump back to binary)*
+| Number | Name | What it carries |
+| --- | --- | --- |
+| `0` | `stdin` | Input (keyboard) |
+| `1` | `stdout` | Normal command output |
+| `2` | `stderr` | Error messages |
 
+Breaking down `2>/dev/null`:
 
+- **`2`** — the stream to redirect: `stderr`.
+- **`>`** — the redirection operator: send the stream on the left to the location on the right.
+- **`/dev/null`** — the null device, a special file that discards everything written to it (a black hole).
 
-**Archives & Compression**
+Result: errors are thrown away, normal output still prints.
 
-* **`tar`** – Bundle multiple files into a single archive file.
-* `tar -cvf archive.tar dir/` *(Create tar archive)*
-* `tar -xvf archive.tar` *(Extract tar archive)*
-* `tar -ztvf archive.tar.gz` *(List contents of gzipped archive)*
+---
 
+## 4. Searching and processing text
 
-* **`gzip`** – Compress or decompress files using standard LZ77 (`.gz`).
-* `gzip file.txt` *(Compresses into `file.txt.gz`)*
-* `gzip -d file.gz` *(Decompress file)*
+*[Levels 7–11]*
 
+### `grep` — search text for a pattern
 
-* **`bzip2`** – High-ratio file compression (`.bz2`).
-* `bzip2 file.txt` *(Compresses into `file.txt.bz2`)*
-* `bzip2 -d file.bz2` *(Decompress file)*
+```bash
+grep "pattern" file.txt      # Lines containing the pattern
+grep -i "pattern" file.txt   # Case-insensitive
+grep -rn "pattern" .         # Recursive, with line numbers
+```
+
+### `sort` — order lines
+
+```bash
+sort file.txt      # Alphabetical
+sort -n file.txt   # Numerical
+sort -r file.txt   # Reversed
+```
+
+### `uniq` — filter repeated lines
+
+`uniq` only compares **adjacent** lines, so always `sort` first.
+
+```bash
+sort file.txt | uniq      # Remove duplicates
+sort file.txt | uniq -u   # Only lines that appear exactly once
+sort file.txt | uniq -c   # Count occurrences of each line
+```
+
+### `tr` — translate or delete characters
+
+`tr` reads from standard input only, so pipe the file into it.
+
+```bash
+cat file.txt | tr 'a-z' 'A-Z'                 # Convert to uppercase
+cat file.txt | tr -d '\r'                     # Delete specific characters
+cat file.txt | tr 'A-Za-z' 'N-ZA-Mn-za-m'     # Decode ROT13
+```
+
+---
+
+## 5. Binary inspection and encoding
+
+*[Levels 9–12]*
+
+### `strings` — pull readable text out of a binary
+
+```bash
+strings file.bin        # Print the ASCII strings found inside
+strings -n 8 file.bin   # Only strings at least 8 characters long
+```
+
+### `base64` — encode / decode Base64
+
+```bash
+base64 file.txt          # Encode
+base64 -d encoded.txt    # Decode back to raw data
+```
+
+### `xxd` — hex dumps
+
+```bash
+xxd file.bin                     # View hex + ASCII representation
+xxd -r hex.txt > output.bin      # Reverse a hex dump back to binary
+```
+
+---
+
+## 6. Archives and compression
+
+*[Level 12]*
+
+| Tool | Extension | Purpose |
+| --- | --- | --- |
+| `tar` | `.tar` | Bundles many files into one archive (no compression by itself) |
+| `gzip` | `.gz` | Standard LZ77 compression |
+| `bzip2` | `.bz2` | Higher-ratio compression |
+
+### `tar`
+
+```bash
+tar -cvf archive.tar dir/      # Create an archive
+tar -xvf archive.tar           # Extract an archive
+tar -ztvf archive.tar.gz       # List contents of a gzipped archive
+```
+
+### `gzip`
+
+```bash
+gzip file.txt      # Compress into file.txt.gz
+gzip -d file.gz    # Decompress
+```
+
+### `bzip2`
+
+```bash
+bzip2 file.txt      # Compress into file.txt.bz2
+bzip2 -d file.bz2   # Decompress
+```
+
+**Tip:** when a file has been compressed several times over, run `file` on it after each step to see which tool to use next.
