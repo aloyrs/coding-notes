@@ -163,6 +163,33 @@ The password is pYfOY6HwUsDj5rL9UvyhU7MCmv8vN5Ro
 ```
 
 # Level 12
+
+The password is in `data.txt`, a hex dump of a file that was compressed repeatedly.
+
 ```shell
+**bandit12@bandit**:**~**$ cd $(mktemp -d)      # work in a temp dir (home is read-only)
+**bandit12@bandit**:**/tmp/tmp.xxx**$ cp ~/data.txt .
+**bandit12@bandit**:**/tmp/tmp.xxx**$ xxd -r data.txt data      # undo the hex dump
+
+# Repeat: file <name> -> rename to match -> decompress/extract, until "ASCII text"
+$ file data                      # gzip compressed data
+$ mv data data.gz && gzip -d data.gz
+$ file data                      # bzip2 compressed data
+$ mv data data.bz2 && bzip2 -d data.bz2
+$ file data.out                  # gzip compressed data
+$ mv data.out data.gz && gzip -d data.gz
+$ file data                      # POSIX tar archive
+$ tar -xf data                   # -> new file (e.g. data5.bin)
+$ file data5.bin                 # POSIX tar archive
+$ tar -xf data5.bin              # -> data6.bin
+$ file data6.bin                 # bzip2 compressed data
+$ bzip2 -d data6.bin             # -> data6.bin.out
+$ file data6.bin.out             # POSIX tar archive
+$ tar -xf data6.bin.out          # -> data8.bin
+$ file data8.bin                 # gzip compressed data
+$ mv data8.bin data8.gz && gzip -d data8.gz
+$ file data8                     # ASCII text
+$ cat data8
+
 The password is qQYQiHOBPR8zR61qxYqX45quvihF2uzk
 ```

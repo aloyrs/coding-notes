@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "courses/OverTheWire-Bandit/Challenges.md",
+                "file": "courses/OverTheWire-Bandit/Notes.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Challenges"
+              "title": "Notes"
             }
           }
         ]
@@ -188,8 +188,8 @@
   },
   "active": "c4fa656c3247fc0c",
   "lastOpenFiles": [
-    "courses/OverTheWire-Bandit/Notes.md",
     "courses/OverTheWire-Bandit/Challenges.md",
+    "courses/OverTheWire-Bandit/Notes.md",
     "system-design/system-design.md",
     "courses/Over.md",
     "courses/OverTheWire-Bandit",
