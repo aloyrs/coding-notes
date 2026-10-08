@@ -150,9 +150,19 @@ R**==========** B0s2khmbT9u0geKuOoVGW3JZKhndE3BG
 
 # Level 10
 ```shell
-**bandit10@bandit**:**~**$ base64 data.txt 
+**bandit10@bandit**:**~**$ base64 -d data.txt
 
-VkdobElIQmhjM04zYjNKa0lHbHpJSEJaWms5Wk5raDNWWE5FYWpWeVREbFZkbmxvVlRkTlEyMTJP
+The password is pYfOY6HwUsDj5rL9UvyhU7MCmv8vN5Ro
+```
 
-SFpPTlZKdkNnPT0K
+# Level 11
+```shell
+**bandit11@bandit**:**~**$ cat data.txt | tr 'A-Za-z' 'N-ZA-Mn-za-m'
+
+The password is GROozWPO8QyN0mGrjUkID0WCYkZiQxrN
+```
+
+# Level 12
+```shell
+
 ```
