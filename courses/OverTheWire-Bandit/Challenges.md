@@ -159,7 +159,7 @@ The password is pYfOY6HwUsDj5rL9UvyhU7MCmv8vN5Ro
 ```shell
 **bandit11@bandit**:**~**$ cat data.txt | tr 'A-Za-z' 'N-ZA-Mn-za-m'
 
-The password is GROozWPO8QyN0mGrjUkID0WCYkZiQxrN
+	The password is GROozWPO8QyN0mGrjUkID0WCYkZiQxrN
 ```
 
 # Level 12
